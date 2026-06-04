@@ -1,0 +1,43 @@
+import { useEffect, useState } from "react";
+import API from "../api";
+
+function App() {
+  const [stocks, setStocks] = useState([]);
+
+  useEffect(() => {
+    loadStocks();
+  }, []);
+
+  const loadStocks = async () => {
+    try {
+      const res = await API.get("/candidates");
+      setStocks(res.data.stocks || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h1>🔥 Breakout Scanner</h1>
+
+      {stocks.map((stock, index) => (
+        <div
+          key={index}
+          style={{
+            border: "1px solid #ddd",
+            padding: "10px",
+            marginBottom: "10px"
+          }}
+        >
+          <h3>{stock.symbol}</h3>
+          <p>Price: ₹{stock.price}</p>
+          <p>Score: {stock.score}</p>
+          <p>Volume Ratio: {stock.vol_ratio}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default App;
