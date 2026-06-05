@@ -18,7 +18,9 @@ function App() {
   };
   const runScan = async () => {
   await fetch("https://brakeoutstockfinder-1.onrender.com/scan");
-  alert("Scan complete");
+  const data = await res.json();
+
+  console.log(data);
 };
 
   return (

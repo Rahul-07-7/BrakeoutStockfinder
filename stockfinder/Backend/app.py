@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import json
 import os
 from fastapi.middleware.cors import CORSMiddleware
+import subprocess
 
 app = FastAPI()
 app.add_middleware(
@@ -21,7 +22,28 @@ def home():
     return {
         "status": "Scanner API Running"
     }
-    
+
+@app.get("/scan")
+def scan_market():
+
+    try:
+        subprocess.run(
+            ["python", "stock.py"],
+            check=True
+        )
+
+        return {
+            "status": "success",
+            "message": "Scan completed"
+        }
+
+    except Exception as e:
+
+        return {
+            "status": "error",
+            "message": str(e)
+        }
+           
 @app.get("/env")
 def env():
     return {
