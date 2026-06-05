@@ -17,7 +17,16 @@ function App() {
     }
   };
 
-  useEffect(() => {
+   const runScan = async () => {
+  await fetch("https://brakeoutstockfinder-1.onrender.com/scan");
+  const data = await res.json();
+
+  const getStatus = async () => {
+  const res = await API.get("/scan-status");
+  setStatus(res.data);
+};
+
+ useEffect(() => {
 
   getStatus();
 
@@ -29,14 +38,6 @@ function App() {
   return () => clearInterval(interval);
 
 }, []);
-  const runScan = async () => {
-  await fetch("https://brakeoutstockfinder-1.onrender.com/scan");
-  const data = await res.json();
-
-  const getStatus = async () => {
-  const res = await API.get("/scan-status");
-  setStatus(res.data);
-};
 
   console.log(data);
 };
