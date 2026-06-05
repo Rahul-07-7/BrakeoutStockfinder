@@ -16,10 +16,17 @@ function App() {
       console.error(err);
     }
   };
+  const runScan = async () => {
+  await fetch("https://brakeoutstockfinder-1.onrender.com/scan");
+  alert("Scan complete");
+};
 
   return (
     <div style={{ padding: "20px" }}>
       <h1>🔥 Breakout Scanner</h1>
+      <button onClick={runScan}>
+       Run Scan
+      </button>
 
       {stocks.map((stock, index) => (
         <div
