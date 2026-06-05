@@ -16,9 +16,27 @@ function App() {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+
+  getStatus();
+
+  const interval = setInterval(
+    getStatus,
+    5000
+  );
+
+  return () => clearInterval(interval);
+
+}, []);
   const runScan = async () => {
   await fetch("https://brakeoutstockfinder-1.onrender.com/scan");
   const data = await res.json();
+
+  const getStatus = async () => {
+  const res = await API.get("/scan-status");
+  setStatus(res.data);
+};
 
   console.log(data);
 };
@@ -30,6 +48,18 @@ function App() {
        Run Scan
       </button>
 
+      <h3>
+  Status:
+  {status.running ? " 🔄 Scanning" : " ✅ Idle"}
+</h3>
+
+<p>
+  Last Scan: {status.last_scan}
+</p>
+
+<p>
+  {status.message}
+</p>
       {stocks.map((stock, index) => (
         <div
           key={index}

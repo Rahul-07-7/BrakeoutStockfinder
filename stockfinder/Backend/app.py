@@ -25,35 +25,52 @@ def home():
 
 
 
+
+from datetime import datetime
+
 @app.get("/scan")
 def scan_market():
 
-    try:
+    scan_status["running"] = True
+    scan_status["message"] = "Scanning..."
 
+    try:
         result = subprocess.run(
             ["python", "stock.py"],
             capture_output=True,
             text=True
         )
 
+        scan_status["running"] = False
+        scan_status["last_scan"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        if result.returncode == 0:
+            scan_status["message"] = "Completed"
+        else:
+            scan_status["message"] = result.stderr
+
         return {
-            "returncode": result.returncode,
-            "stdout": result.stdout,
-            "stderr": result.stderr
+            "returncode": result.returncode
         }
 
     except Exception as e:
 
-        return {
-            "error": str(e)
-        }
+        scan_status["running"] = False
+        scan_status["message"] = str(e)
+
+        return {"error": str(e)}
            
+scan_status = {
+    "running": False,
+    "last_scan": None,
+    "message": ""
+}
+
+@app.get("/scan-status")
+def get_scan_status():
+    return scan_status
 @app.get("/env")
-def env():
-    return {
-        "api": API_KEY is not None,
-        "client": CLIENT_ID is not None
-    }
+
 
 @app.get("/candidates")
 def get_candidates():
