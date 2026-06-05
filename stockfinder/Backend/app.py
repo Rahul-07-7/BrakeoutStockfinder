@@ -23,25 +23,29 @@ def home():
         "status": "Scanner API Running"
     }
 
+
+
 @app.get("/scan")
 def scan_market():
 
     try:
-        subprocess.run(
+
+        result = subprocess.run(
             ["python", "stock.py"],
-            check=True
+            capture_output=True,
+            text=True
         )
 
         return {
-            "status": "success",
-            "message": "Scan completed"
+            "returncode": result.returncode,
+            "stdout": result.stdout,
+            "stderr": result.stderr
         }
 
     except Exception as e:
 
         return {
-            "status": "error",
-            "message": str(e)
+            "error": str(e)
         }
            
 @app.get("/env")
