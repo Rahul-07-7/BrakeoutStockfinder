@@ -11,11 +11,22 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+API_KEY = os.getenv("API_KEY")
+CLIENT_ID = os.getenv("CLIENT_ID")
+MPIN = os.getenv("MPIN")
+TOTP_SECRET = os.getenv("TOTP_SECRET")
 
 @app.get("/")
 def home():
     return {
         "status": "Scanner API Running"
+    }
+    
+@app.get("/env")
+def env():
+    return {
+        "api": API_KEY is not None,
+        "client": CLIENT_ID is not None
     }
 
 @app.get("/candidates")

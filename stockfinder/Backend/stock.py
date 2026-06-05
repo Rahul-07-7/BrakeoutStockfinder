@@ -9,10 +9,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 
 # --- CONFIG ---
-API_KEY = "4kuX4Lor"
-CLIENT_ID = "AABP855222"
-MPIN = "9909"
-TOTP_SECRET = "AA5BQYP7WD5TWNKOEIMRG4D5CA"
+API_KEY = os.getenv("API_KEY")
+CLIENT_ID = os.getenv("CLIENT_ID")
+MPIN = os.getenv("MPIN")
+TOTP_SECRET = os.getenv("TOTP_SECRET")
 
 TOTAL_BUDGET = 20000
 MAX_STOCKS_TO_BUY = 2
